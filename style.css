@@ -229,3 +229,145 @@ nav button:hover {
     padding: 14px 12px;
 }
 
+.modal-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    width: 420px;
+    max-width: 90%;
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: var(--verde-principal);
+}
+
+.modal-dados {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-dados p {
+    margin: 0;
+}
+
+.modal button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+
+    background: var(--verde-principal);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal button:hover {
+    background: #256b29;
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fundo);
+}
+
+.login-box {
+    width: 450px;
+    max-width: 90%;
+    background: var(--branco);
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.login-box h1 {
+    text-align: center;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.login-box .campo {
+    margin-bottom: 16px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--verde-principal);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.login-box buttom:hover {
+    background: 40px;
+}
+
+#mensagemLogin {
+    margin-bottom: 10px;
+}
+
+.select-status {
+    width: 190px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+
+    /*tirar o brave de força guia preta*/
+    appearance: none;
+    -webkit-appearance: none;
+
+    background-color: white;
+}
+
+/* Aguardando aprovação */
+.select-status.status-Aguardando-aprovação {
+    background-color: #fff8df !important;
+    color: #856404 !important;
+    border-color: #f0ad00 !important;
+}
+
+/* Aguardando compra */
+.select-status.status-Aguardando-compra {
+    background-color: #eaf3ff !important;
+    color: #084298 !important;
+    border-color: #007bff !important;
+}
+
+/* Comprado */
+.select-status.status-Comprado {
+    background-color: #eaf7ed !important;
+    color: #176b2c !important;
+    border-color: #28a745 !important;
+}
+
+/* Recusado */
+.select-status.status-Recusado {
+    background-color: #fff0f1 !important;
+    color: #a51d2a !important;
+    border-color: #dc3545 !important;
+}

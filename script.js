@@ -1,4 +1,8 @@
+const usuarioLogado = localStorage.getItem("usuarioLogado");
 
+if (!usuarioLogado) {
+    window.location.href = "login.html";
+}
 
 //armazenamento
 
@@ -56,7 +60,11 @@ btnEstoque.addEventListener("click", function() {
 //retirar
 const btnRetirar = document.getElementById("btnRetirar");
 const btnDevolver = document.getElementById("btnDevolver");
-const btnHistorico = document.getElementById("btnHistorico");
+const btnStatusCompra = document.getElementById("btnStatusCompra");
+
+if (usuarioLogado !== "ti") {
+    btnStatusCompra.style.display = "none";
+}
 const conteudo = document.getElementById("conteudo");
 
 
@@ -69,12 +77,17 @@ btnDevolver.addEventListener("click", function() {
                 <div class="campo"
                     <label>Equipamento</label>
 
-                    <select id="equipamentoDevolver">
-                        <option value="">Selecione um equipamento</option>
-                        <option value="monitor">Monitor</option>
-                        <option value="notebook">Notebook</option>
-                        <option value="teclado">Teclado</option>
-                    </select>
+                    <input id="equipamentoDevolver"
+                    list="listaEquipamentosDevolver"
+                    placeholder="Digite o equipamento..."
+
+                    >
+
+                <datalist id="listaEquipamentosDevolver">
+                    <option value="monitor">
+                    <option value="notebook">
+                    <option value="teclado">
+                </datalist>
                 </div>
 
                 <div class="campo">
@@ -138,75 +151,7 @@ btnDevolver.addEventListener("click", function() {
     })
 
 });
-
-    btnHistorico.addEventListener("click", function() {
-        tituloPagina.textContent = "Historico";
-
-            conteudo.innerHTML = `
-            <h3>Historico de movimentação</h3>
-
-            <table class="tabela-historico">
-                <thead>
-                    <tr>
-                        <th>Data/Hora</th>
-                        <th>Tipo</th>
-                        <th>Equipamento</th>
-                        <th>Quantidade</th>
-                        <th>Tecnico</th>
-                        <th>Loja</th>
-                        <th>Chamado</th>
-                    </tr>
-                </thead>
-                
-                <tbody id="tabelaHistorico"></tbody>
-            </table>
-            
-            `;
-
-        const tabelaHistorico = document.getElementById("tabelaHistorico");
-
-        historico.forEach(function(item) {
-
-            const nomeEquipamento = 
-                item.equipamento === "notebook" ? "Notebook" :
-                item.equipamento === "monitor" ? "Monitor" :
-                "Teclado";
-
-            const nomeTecnico =
-                item.tecnico === "joao" ? "João" :
-                item.tecnico === "giovanni" ? "Giovanni" :
-                item.tecnico === "nicolas" ? "Nicolas" :
-                item.tecnico === "murilo" ? "Murilo" :
-                item.tecnico === "eric" ? "Eric" :
-                item.tecnico;
-
-            const nomeLoja =
-                item.loja === "loja1" ? "Loja 1" :
-                item.loja === "loja2" ? "Loja 2" :
-                item.loja === "loja4" ? "Loja 4" :
-                item.loja;
-
-        const dataFormatada = item.data.toLocaleString("pt-BR");
-
-               tabelaHistorico.innerHTML += `
-        <tr>
-                     <td>${dataFormatada}</td>
-
-         <td>
-                     <span class="${item.tipo === "Retirada" ? "badge-retirada" : "badge-devolucao"}">
-                        ${item.tipo}
-                    </span>
-        </td>
-
-        <td>${nomeEquipamento}</td>
-        <td>${item.quantidade}</td>
-        <td>${nomeTecnico}</td>
-        <td>${nomeLoja}</td>
-        <td>${item.chamado}</td>
-    </tr>
-`;
-        });
-    });
+    
 
 btnRetirar.addEventListener("click", function() {
 
@@ -218,38 +163,53 @@ btnRetirar.addEventListener("click", function() {
             <div class="campo">
                 <label>Equipamento</label>
                 
-                <select id="equipamento">
-                    <option value="">Selecione um equipamento</option>
-                    <option value="monitor">Monitor</option>
-                    <option value="notebook">Notebook</option>
-                    <option value="teclado">Teclado</option>
-                </select>
+                <input
+                    id="equipamento"
+                    list="listaEquipamentos"
+                    placeholder="Digite o equipamento..."
+
+                >
+
+                <datalist id="listaEquipamentos">
+                    <option value="monitor">
+                    <option value="notebook">
+                    <option value="teclado">
+                </datalist>
+                
             </div>
 
             <div class="campo">
                 <label>Técnico</label>
                 
-                <select id="tecnico">
-                    <option value="">Selecionar Tecnico</option>
-                    <option value="joao">João</option>
-                    <option value="giovanni">Giovanni</option>
-                    <option value="nicolas">Nicolas</option>
-                    <option value="murilo">Murilo</option>
-                    <option value="eric">Eric</option>
-                </select>
+                <input 
+                    id="tecnico"
+                    list="listaTecnicos"
+                    placeholder="Digite o nome do tecnico..."
+                >
 
+                <datalist id="listaTecnicos">
+                    <option value="João">
+                    <option value="Giovanni">
+                    <option value="Nicolas">
+                    <option value="Murilo">
+                    <option value="Eric">
+                </datalist>
             </div>
 
             <div class="campo">
                 <label>Loja</label>
 
-                <select id="loja">
-                    <option value="">Selecione a loja</option>
-                    <option value="loja1">Loja 1</option>
-                    <option value="loja2">Loja 2</option>
-                    <option value="loja4">Loja 4</option>
-                </select>
-                
+                    <input
+                        id="loja"
+                        list="listalojas"
+                        placeholder="Digite a loja..."
+                    >
+
+                    <datalist id="listaLojas">
+                        <option value="Loja 1">
+                        <option value="Loja 2">
+                        <option value="Loja 4">
+                    </datalist>
             </div>
 
 
@@ -268,6 +228,26 @@ btnRetirar.addEventListener("click", function() {
             <button id="btnConfirmar">Confirmar retirada</button>
 
         </div>
+
+        <h3 class="titulo-historico">Histórico de movimentações</h3>
+
+        <table class="tabela-historico">
+            <thead>
+                <tr>
+                    
+                    <th>Data/Hora</th>
+                    <th>Tipo</th>
+                    <th>Equipamento</th>
+                    <th>Quantidade</th>
+                    <th>Tecnico</th>
+                    <th>Loja</th>
+                    <th>Chamado</th>
+                    <th>Status Compra</th>
+                </tr>
+            </thead>
+
+            <tbody id="tabelaHistoricoRetirada"></tbody>
+            </table>
         
      `;
 
@@ -285,21 +265,55 @@ btnRetirar.addEventListener("click", function() {
 
     const btnConfirmar = document.getElementById("btnConfirmar");
     const mensagem = document.getElementById("mensagem");
+    const tabelaHistoricoRetirada = document.getElementById("tabelaHistoricoRetirada");
 
+    historico.forEach(function(item) {
 
-//confirmar
+        const nomeEquipamento = 
+            item.equipamento === "notebook" ? "Notebook" :
+            item.equipamento === "monitor" ? "Monitor" :
+            "Teclado";
+
+        const nomeTecnico =
+            item.tecnico === "joao" ? "João" :
+            item.tecnico === "giovanni" ? "Giovanni" :
+            item.tecnico === "nicolas" ? "Nicolas" :
+            item.tecnico === "murilo" ? "Murilo" :
+            item.tecnico === "eric" ? "Eric" :
+            item.tecnico;
+
+        const nomeLoja =
+            item.loja === "loja1" ? "Loja 1" :
+            item.loja === "loja2" ? "Loja 2" :
+            item.loja === "loja4" ? "Loja 4" :
+            item.loja;
+
+        const dataFormatada = item.data.toLocaleString("pt-BR");
+
+        tabelaHistoricoRetirada.innerHTML += `
+            <tr>
+                <td>${dataFormatada}</td>
+                <td>
+                    <span class="${item.tipo === "Retirada" ? "badge-retirada" : "badge-devolucao"}">
+                        ${item.tipo}
+                    </span>
+                </td>
+                <td>${nomeEquipamento}</td>
+                <td>${item.quantidade}</td>
+                <td>${nomeTecnico}</td>
+                <td>${nomeLoja}</td>
+                <td>${item.chamado}</td>
+                <td>
+                    ${item.statusCompra || "-"}
+                </td>
+            </tr>
+        `;
+    });
+
     btnConfirmar.addEventListener("click", function() {
-
-
-        console.log(campoEquipamento.value);
-        console.log(campoTecnico.value);
-        console.log(campoLoja.value);
-        console.log(campoChamado.value);
-        console.log(campoQuantidade.value);
-
         const quantidade = Number(campoQuantidade.value);
 
-        let estoqueAtual;
+        let estoqueAtual = 0;
 
         if (campoEquipamento.value === "monitor") {
             estoqueAtual = estoqueMonitores;
@@ -313,60 +327,208 @@ btnRetirar.addEventListener("click", function() {
             estoqueAtual = estoqueTeclado;
         }
 
-
-        console.log("Monitores:", estoqueMonitores);
-        console.log("Notebooks:", estoqueNotebooks);
-        console.log("Teclados:", estoqueTeclado);
-
-
-        
-
         if (quantidade <= 0) {
-            mensagem.textContent = "Informe uma quantidade valida.";
-
+            mensagem.textContent = "Informe uma quantidade válida.";
+            mensagem.className = "mensagem erro";
         } else if (quantidade > estoqueAtual) {
             mensagem.textContent = "Estoque Insuficiente.";
             mensagem.className = "mensagem erro";
-
         } else {
+            if (campoEquipamento.value === "monitor") {
+                estoqueMonitores = estoqueMonitores - quantidade;
+            }
 
-                console.log("Equipamento escolhido:", campoEquipamento.value);
-                console.log("Quantidade:", quantidade);
+            if (campoEquipamento.value === "notebook") {
+                estoqueNotebooks = estoqueNotebooks - quantidade;
+            }
 
+            if (campoEquipamento.value === "teclado") {
+                estoqueTeclado = estoqueTeclado - quantidade;
+            }
 
+            historico.push({
+                tipo: "Retirada",
+                equipamento: campoEquipamento.value,
+                quantidade: quantidade,
+                tecnico: campoTecnico.value,
+                loja: campoLoja.value,
+                chamado: campoChamado.value,
+                statusCompra: "Aguardando aprovação",
+                data: new Date()
+            });
 
-                if (campoEquipamento.value === "monitor") {
-                    estoqueMonitores = estoqueMonitores - quantidade;
-                }
+            const modal = document.createElement("div");
+            modal.className = "modal-fundo";
 
-                if (campoEquipamento.value === "notebook") {
-                    estoqueNotebooks = estoqueNotebooks - quantidade;
+            modal.innerHTML = `
+                <div class="modal">
+                    <h2>✓ Retirada realizadaa</h2>
 
-                    console.log("Notebook atualizado:", estoqueNotebooks);
-                }
+                    <div class="modal-dados">
+                        <p><strong>Equipamento:</strong> ${campoEquipamento.value}</p>
+                        <p><strong>Quantidade:</strong> ${quantidade}</p>
+                        <p><strong>Técnico:</strong> ${campoTecnico.value}</p>
+                        <p><strong>Loja:</strong> ${campoLoja.value}</p>
+                        <p><strong>Chamado:</strong> ${campoChamado.value}</p>
+                    </div>
 
-                if (campoEquipamento.value === "teclado") {
-                    estoqueTeclado = estoqueTeclado - quantidade;
-                }
+                    <button id="btnFecharModal">Confirmar</button>
+                </div>
+            `;
 
-                
-                historico.push({
-                    tipo: "Retirada",
-                    equipamento: campoEquipamento.value,
-                    quantidade: quantidade,
-                    tecnico: campoTecnico.value,
-                    loja: campoLoja.value,
-                    chamado: campoChamado.value,
-                    data: new Date()
-                });
+            document.body.appendChild(modal);
 
-                console.log("Historico", historico);
-
-                
-
-                mensagem.textContent = "Retirada realizada com sucesso!";
-                mensagem.className = "mensagem sucesso";
+            document.getElementById("btnFecharModal").addEventListener("click", function() {
+                modal.remove();
+            });
         }
     });
+});
 
+btnStatusCompra.addEventListener("click", function() {
+
+    if (usuarioLogado !== "ti") {
+        return;
+    }
+    tituloPagina.textContent = "Status de compra";
+
+    const aguardandoAprovacao = historico.filter(
+        item => item.statusCompra === "Aguardando aprovação"
+    ).length;
+
+    const aguardandoCompra = historico.filter(
+        item => item.statusCompra === "Aguardando compra"
+    ).length;
+
+    const comprado = historico.filter(
+        item => item.statusCompra === "Comprado"
+    ).length;
+
+    const recusado = historico.filter(
+        item => item.statusCompra === "Recusado"
+    ).length;
+
+    let tabelaStatus = "";
+
+    historico.forEach(function(item, index) {
+        
+        if (item.tipo !== "Retirada") {
+            return;
+        }
+
+        tabelaStatus += `
+        
+            <tr>
+                <td>${index + 1}</td>
+                <td>${item.equipamento}</td>
+                <td>${item.quantidade}</td>
+                <td>${item.tecnico}</td>
+                <td>${item.loja}</td>
+                <td>${item.chamado}</td>
+                <td>
+                    <select
+                         class="select-status status-${item.statusCompra.replaceAll(" ", "-")}"
+                        data-index="${index}"
+                        >
+                        <option value="Aguardando aprovação" ${item.statusCompra === "Aguardando aprovação" ? "selected" : ""}>
+                            Aguardando aprovação
+                        </option>
+
+                        <option value="Aguardando compra" ${item.statusCompra === "Aguardando compra" ? "selected" : ""}>
+                             Aguardando compra
+                        </option>
+
+                        <option value="Comprado" ${item.statusCompra === "Comprado" ? "selected" : ""}>
+                             Comprado
+                         </option>
+
+                        <option value="Recusado" ${item.statusCompra === "Recusado" ? "selected" : ""}>
+                             Recusado
+                         </option>
+                     </select>
+                </td>
+                    
+             </tr>
+             
+             `;
     });
+
+    conteudo.innerHTML = `
+        <div class="page-header">
+            <div>
+                <h2>Status de Compra</h2>
+                <p>Acompanhe o andamento das solicitações</p>
+            </div>
+        </div>
+
+        <div class="estoque">
+            <div class="card">
+                <h3>Aguardando aprovação</h3>
+                <strong>${aguardandoAprovacao}</strong>
+                <span>solicitações</span>
+            </div>
+
+            <div class="card">
+                <h3>Aguardando compra</h3>
+                <strong>${aguardandoCompra}</strong>
+                <span>solicitações</span>
+            </div>
+
+            <div class="card">
+                <h3>Comprado</h3>
+                <strong>${comprado}</strong>
+                <span>solicitações</span>
+            </div>
+
+            <div class="card">
+                <h3>Recusado</h3>
+                <strong>${recusado}</strong>
+                <span>solicitações</span>
+            </div>
+        </div>
+
+    <h3 class="titulo-historico">Solicitações de compra</h3>
+
+    <table class="tabela-historico">
+        
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Equipamento</th>
+                <th>Quantidade</th>
+                <th>Tecnico</th>
+                <th>Loja</th>
+                <th>Chamado</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            ${tabelaStatus}
+        </tbody>
+
+    </table>
+
+    `;
+
+    
+        const selectStatus = document.querySelectorAll(".select-status");
+
+        selectStatus.forEach(function(select) {
+
+            select.addEventListener("change", function() {
+
+                const index = Number(select.dataset.index);
+
+                historico[index].statusCompra = select.value;
+
+                select.className = "select-status status-" + select.value.replaceAll(" ", "-");
+
+                console.log("Status atualizado:", historico[index]);
+
+                tituloPagina.textContent = "Status de compra";
+                btnStatusCompra.click();
+
+            });
+        });
+});
