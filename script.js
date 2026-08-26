@@ -62,6 +62,13 @@ const btnRetirar = document.getElementById("btnRetirar");
 const btnDevolver = document.getElementById("btnDevolver");
 const btnStatusCompra = document.getElementById("btnStatusCompra");
 
+const btnLogout = document.getElementById("btnLogout");
+
+btnLogout.addEventListener("click", function() {
+    localStorage.removeItem("usuarioLogado");
+    window.location.href = "login.html";
+});
+
 if (usuarioLogado !== "ti") {
     btnStatusCompra.style.display = "none";
 }
@@ -113,6 +120,31 @@ btnDevolver.addEventListener("click", function() {
     btnConfirmarDevolucao.addEventListener("click", function() {
 
         const quantidade = Number(campoQuantidadeDevolver.value);
+
+const equipamento = campoEquipamentoDevolver.value;
+
+const totalRetirado = historico
+    .filter(item => item.tipo === "Retirada" && item.equipamento === equipamento)
+    .reduce((total, item) => total + item.quantidade, 0);
+
+const totalDevolvido = historico
+    .filter(item => item.tipo === "Devolução" && item.equipamento === equipamento)
+    .reduce((total, item) => total + item.quantidade, 0);
+
+const disponivelParaDevolver = totalRetirado - totalDevolvido;
+
+if (quantidade <= 0) {
+    mensagemDevolver.textContent = "Informe uma quantidade válida.";
+    mensagemDevolver.className = "mensagem erro";
+    return;
+}
+
+if (quantidade > disponivelParaDevolver) {
+    mensagemDevolver.textContent =
+        `Você só pode devolver ${disponivelParaDevolver} ${equipamento}(s).`;
+    mensagemDevolver.className = "mensagem erro";
+    return;
+}
 
         console.log("Equipamento devolvido:", campoEquipamentoDevolver.value);
         console.log("Quantidade devolvida:", quantidade);
