@@ -9,16 +9,19 @@ btnLogin.addEventListener("click", function() {
     const senha = campoSenha.value;
 
     if (usuario === "ti" && senha === "1234") {
-        
-        localStorage.setItem("usuarioLogado", "ti");
+
+        sessionStorage.setItem("usuarioLogado", "ti");
+        sessionStorage.setItem("perfilUsuario", "ti");
 
         window.location.href = "index.html";
-
+        
     } else if (usuario === "usuario" && senha === "1234") {
 
-        localStorage.setItem("usuarioLogado", "usuario");
+        sessionStorage.setItem("usuarioLogado", "usuario");
+        sessionStorage.setItem("perfilUsuario", "tecnico");
 
         window.location.href = "index.html";
+
 
     } else {
 

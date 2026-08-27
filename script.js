@@ -1,8 +1,10 @@
-const usuarioLogado = localStorage.getItem("usuarioLogado");
+const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+const perfilUsuario = sessionStorage.getItem("perfilUsuario");
 
 if (!usuarioLogado) {
     window.location.href = "login.html";
 }
+
 
 //armazenamento
 
@@ -64,15 +66,89 @@ const btnStatusCompra = document.getElementById("btnStatusCompra");
 
 const btnLogout = document.getElementById("btnLogout");
 
-btnLogout.addEventListener("click", function() {
-    localStorage.removeItem("usuarioLogado");
-    window.location.href = "login.html";
-});
-
-if (usuarioLogado !== "ti") {
+if (perfilUsuario === "tecnico") {
     btnStatusCompra.style.display = "none";
 }
+
+
+//botão de saida
+btnLogout.addEventListener("click", function() {
+
+    const desejaSair = confirm("Deseja realmente sair do sistema?")
+
+    if (desejaSair) {
+    sessionStorage.removeItem("usuarioLogado");
+    sessionStorage.removeItem("perfilUsuario");
+    window.location.href = "login.html";
+
+    }
+});
+
 const conteudo = document.getElementById("conteudo");
+
+    function mostrarDashboard() {
+
+        if (perfilUsuario === "tecnico") {
+
+            conteudo.innerHTML = `
+                <div class="page-header">
+                    <h2>Olá, Técnico!<h2>
+                    <p>O que voce deseja fazer?</p>
+                </div>
+                
+                <div class="card card-acao" id="cardRetirar">
+                    <h3>📤 Retirar equipamento</h3>
+                    <p>Registrar uma nova retirada.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>📥 Devolver equipamento</h3>
+                    <p>Registrar uma devolução.</p>
+                </div>
+                
+                <div class="card">
+                   <h3>🛒 Status de compra</h3> 
+                   <P>Consultar solicitações de compra.</p>
+                </div>
+            </div>
+            `;
+        } else {
+
+        conteudo.innerHTML = `
+            <div class="page-header">
+                <h2>Dashboard TI</h2>
+                <p>Gerenciamento do sistema.</p>
+            </div>
+
+            <div class="estoque">
+                <div class="card">
+                    <h3>📦 Estoque</h3>
+                    <p>Controle de equipamentos.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🏢 Unidades</h3>
+                    <p>Gerenciar unidades.</p>
+                </div>
+
+                <div class="card">
+                    <h3>👥 Usuários</h3>
+                    <p>Gerenciar usuários.</p>
+                </div>
+            </div> 
+            
+            `;
+        }
+    }
+
+    mostrarDashboard();
+
+    if (perfilUsuario === "tecnico") {
+
+        document.getElementById("cardRetirar").addEventListener("click", function() {
+            btnRetirar.click();
+        });
+    }
 
 
 btnDevolver.addEventListener("click", function() {
