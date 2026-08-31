@@ -233,8 +233,12 @@ nav button:hover {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
+
+
+    display: flex;
     align-items: center;
     justify-content: center;
+
     z-index: 1000;
 }
 
@@ -370,4 +374,36 @@ nav button:hover {
     background-color: #fff0f1 !important;
     color: #a51d2a !important;
     border-color: #dc3545 !important;
+}
+
+.dashboard-ti {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.dashboard-ti .card {
+    min-height: 180px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboard-ti .card h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.dashboard-ti .card p {
+    font-size: 15px;
+}
+
+.dashboard-ti .card-acao {
+    cursor: pointer;
+}
+
+.dashboard-ti .card-acao:hover {
+    transform: translateY(-4px);
 }
