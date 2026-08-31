@@ -8,9 +8,9 @@ if (!usuarioLogado) {
 
 //armazenamento
 
-let estoqueMonitores = 10;
-let estoqueNotebooks = 5;
-let estoqueTeclado = 15;
+let estoqueMonitores = Number(localStorage.getItem("estoqueMonitores")) || 10;
+let estoqueNotebooks = Number(localStorage.getItem("estoqueNotebooks")) || 5;
+let estoqueTeclado = Number(localStorage.getItem("estoqueTeclado")) || 15;
 
 let historico = [];
 
@@ -101,12 +101,12 @@ const conteudo = document.getElementById("conteudo");
                     <p>Registrar uma nova retirada.</p>
                 </div>
                 
-                <div class="card">
+                <div class="card card-acao" id="cardDevolver">
                     <h3>📥 Devolver equipamento</h3>
                     <p>Registrar uma devolução.</p>
                 </div>
                 
-                <div class="card">
+                <div class="card card-acao" id="cardStatusCompra">
                    <h3>🛒 Status de compra</h3> 
                    <P>Consultar solicitações de compra.</p>
                 </div>
@@ -120,22 +120,24 @@ const conteudo = document.getElementById("conteudo");
                 <p>Gerenciamento do sistema.</p>
             </div>
 
-            <div class="estoque">
-                <div class="card">
-                    <h3>📦 Estoque</h3>
-                    <p>Controle de equipamentos.</p>
-                </div>
+            <div class="dashboard-ti">
 
-                <div class="card">
-                    <h3>🏢 Unidades</h3>
-                    <p>Gerenciar unidades.</p>
-                </div>
+            <div class="card card-acao" id="cardEstoque">
+                 <h3>📦 Estoque</h3>
+            <p>Controle de equipamentos.</p>
+            </div>
 
-                <div class="card">
-                    <h3>👥 Usuários</h3>
-                    <p>Gerenciar usuários.</p>
-                </div>
-            </div> 
+            <div class="card card-acao" id="cardUnidades">
+                 <h3>🏢 Unidades</h3>
+         <p>Gerenciar unidades.</p>
+        </div>
+
+    <div class="card card-acao" id="cardUsuarios">
+        <h3>👥 Usuários</h3>
+        <p>Gerenciar usuários.</p>
+    </div>
+
+</div> 
             
             `;
         }
@@ -147,11 +149,77 @@ const conteudo = document.getElementById("conteudo");
 
         document.getElementById("cardRetirar").addEventListener("click", function() {
             btnRetirar.click();
+
         });
+
+        document.getElementById("cardDevolver").addEventListener("click", function() {
+            
+        });
+
+        document.getElementById("cardStatusCompra").addEventListener("click", function() {
+            btnStatusCompra.click();
+        });
+    }
+
+    if (perfilUsuario === "ti") {
+
+        document.getElementById("cardEstoque").addEventListener("click", function() {
+            btnEstoque.click();
+        });
+
+        document.getElementById("cardUnidades").addEventListener("click", function() {
+
+    tituloPagina.textContent = "Unidades";
+
+    conteudo.innerHTML = `
+        <div class="page-header">
+            <h2>Unidades</h2>
+            <p>Gerenciamento das unidades.</p>
+        </div>
+
+        <button id="btnAdicionarUnidade" class="btn-principal">
+            + Adicionar unidade
+        </button>
+
+        <div class="estoque">
+
+            <div class="card">
+                <h3>🏢 Loja 1</h3>
+                <p>Unidade cadastrada</p>
+            </div>
+
+            <div class="card">
+                <h3>🏢 Loja 2</h3>
+                <p>Unidade cadastrada</p>
+            </div>
+
+            <div class="card">
+                <h3>🏢 Loja 4</h3>
+                <p>Unidade cadastrada</p>
+            </div>
+
+        </div>
+    `;
+
+    document.getElementById("btnAdicionarUnidade").addEventListener("click", function() {
+
+        const nomeUnidade = prompt("Digite o nome da unidade:");
+
+        if (!nomeUnidade || nomeUnidade.trim() === "") {
+            return;
+        }
+
+        alert("Unidade adicionada: " + nomeUnidade);
+
+    });
+
+});
+
     }
 
 
 btnDevolver.addEventListener("click", function() {
+
     tituloPagina.textContent = "Devolver Equipamento";
 
     conteudo.innerHTML = `
@@ -454,6 +522,14 @@ btnRetirar.addEventListener("click", function() {
                 estoqueTeclado = estoqueTeclado - quantidade;
             }
 
+
+            // salva o estoque
+
+            localStorage.setItem("estoqueMonitores", estoqueMonitores);
+            localStorage.setItem("estoqueNotebooks", estoqueNotebooks);
+            localStorage.setItem("estoqueTeclado", estoqueTeclado);
+
+
             historico.push({
                 tipo: "Retirada",
                 equipamento: campoEquipamento.value,
@@ -465,12 +541,14 @@ btnRetirar.addEventListener("click", function() {
                 data: new Date()
             });
 
+            localStorage.setItem("historio", JSON.stringify(historico));
+
             const modal = document.createElement("div");
             modal.className = "modal-fundo";
 
             modal.innerHTML = `
                 <div class="modal">
-                    <h2>✓ Retirada realizadaa</h2>
+                    <h2>✓ Retirada realizada</h2>
 
                     <div class="modal-dados">
                         <p><strong>Equipamento:</strong> ${campoEquipamento.value}</p>
@@ -494,6 +572,8 @@ btnRetirar.addEventListener("click", function() {
 });
 
 btnStatusCompra.addEventListener("click", function() {
+
+    tituloPagina.textContent = "Status de compra";
 
     if (usuarioLogado !== "ti") {
         return;
@@ -534,16 +614,18 @@ btnStatusCompra.addEventListener("click", function() {
                 <td>${item.loja}</td>
                 <td>${item.chamado}</td>
                 <td>
-                    <select
+                    ${perfilUsuario === "ti"
+                        ? `
+                 <select
                          class="select-status status-${item.statusCompra.replaceAll(" ", "-")}"
-                        data-index="${index}"
-                        >
-                        <option value="Aguardando aprovação" ${item.statusCompra === "Aguardando aprovação" ? "selected" : ""}>
-                            Aguardando aprovação
-                        </option>
+                            data-index="${index}"
+                     >       
+                         <option value="Aguardando aprovação" ${item.statusCompra === "Aguardando aprovação" ? "selected" : ""}>
+                             Aguardando aprovação
+                         </option>
 
-                        <option value="Aguardando compra" ${item.statusCompra === "Aguardando compra" ? "selected" : ""}>
-                             Aguardando compra
+                         <option value="Aguardando compra" ${item.statusCompra === "Aguardando compra" ? "selected" : ""}>
+                            Aguardando compra
                         </option>
 
                         <option value="Comprado" ${item.statusCompra === "Comprado" ? "selected" : ""}>
@@ -552,8 +634,15 @@ btnStatusCompra.addEventListener("click", function() {
 
                         <option value="Recusado" ${item.statusCompra === "Recusado" ? "selected" : ""}>
                              Recusado
-                         </option>
-                     </select>
+                        </option>
+                  </select>
+                 `
+                : `
+        <span class="select-status status-${item.statusCompra.replaceAll(" ", "-")}">
+            ${item.statusCompra}
+        </span>
+    `
+}
                 </td>
                     
              </tr>
